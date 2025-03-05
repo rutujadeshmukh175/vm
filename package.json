@@ -19,6 +19,7 @@
     "@tailwindcss/vite": "^4.0.4",
     "axios": "^1.7.9",
     "chart.js": "^4.4.7",
+    "express": "^4.21.2",
     "framer-motion": "^12.4.4",
     "i": "^0.3.7",
     "jwt-decode": "^2.2.0",
