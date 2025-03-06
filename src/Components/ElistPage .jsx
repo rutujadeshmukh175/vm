@@ -10,7 +10,7 @@ const ElistPage = () => {
     const [searchQuery, setSearchQuery] = useState(""); // State for search query
     const [statusFilter, setStatusFilter] = useState(""); // State for status filter
 
-    const DOCUMENTS_API_URL = `https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/documents/${categoryId}/${subcategoryId}`;
+    const DOCUMENTS_API_URL = `http://localhost:3000/documents/${categoryId}/${subcategoryId}`;
 
     // Fetch documents based on categoryId and subcategoryId
     useEffect(() => {
@@ -63,7 +63,7 @@ const ElistPage = () => {
     // Function to handle downloading a document
     const handleDownloadDocument = async (documentId) => {
         try {
-            const response = await axios.get(`https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/download/${documentId}`, {
+            const response = await axios.get(`http://localhost:3000/download/${documentId}`, {
                 responseType: "blob", // Important for downloading files
             });
             const url = window.URL.createObjectURL(new Blob([response.data]));

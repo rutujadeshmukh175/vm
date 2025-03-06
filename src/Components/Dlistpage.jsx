@@ -33,7 +33,7 @@ const ElistPage = () => {
 
   useEffect(() => {
     if (categoryId && subcategoryId && distributorId) {
-      const DOCUMENTS_API_URL = `https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/documents/${categoryId}/${subcategoryId}?distributorId=${distributorId}`;
+      const DOCUMENTS_API_URL = `http://localhost:3000/documents/${categoryId}/${subcategoryId}?distributorId=${distributorId}`;
       console.log("API URL:", DOCUMENTS_API_URL); // Debugging
 
       const fetchDocuments = async () => {
@@ -124,12 +124,12 @@ const ElistPage = () => {
                         {/* Styled Status Badge */}
                         <span
                           className={`px-3 py-1 rounded-full text-white text-sm ${document.status === "Approved"
-                              ? "bg-green-500"
-                              : document.status === "Pending"
-                                ? "bg-yellow-500"
-                                : document.status === "Rejected"
-                                  ? "bg-red-500"
-                                  : "bg-blue-500"
+                            ? "bg-green-500"
+                            : document.status === "Pending"
+                              ? "bg-yellow-500"
+                              : document.status === "Rejected"
+                                ? "bg-red-500"
+                                : "bg-blue-500"
                             }`}
                         >
                           {document.status}

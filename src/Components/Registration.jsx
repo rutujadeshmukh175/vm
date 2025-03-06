@@ -18,7 +18,7 @@ const Register = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/categories");
+        const response = await fetch("http://localhost:3000/categories");
         if (!response.ok) {
           throw new Error("Failed to fetch categories");
         }
@@ -37,7 +37,7 @@ const Register = () => {
         const subcategoryData = {};
         for (const category of categories) {
           const response = await fetch(
-            `https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/subcategories/category/${category.category_id}`
+            `http://localhost:3000/subcategories/category/${category.category_id}`
           );
           if (response.ok) {
             const data = await response.json();
@@ -66,7 +66,7 @@ const Register = () => {
     e.preventDefault();
     const userData = { ...formData, role: "Customer", user_login_status: "Active" };
     try {
-      const response = await fetch("https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/users/register", {
+      const response = await fetch("http://localhost:3000/users/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),

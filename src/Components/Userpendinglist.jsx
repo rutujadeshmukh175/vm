@@ -21,7 +21,7 @@ const PendingApplicationsList = () => {
 
         const fetchPendingDocuments = async () => {
             try {
-                const response = await axios.get(`https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/userdashboard/pending/${userId}`);
+                const response = await axios.get(`http://localhost:3000/userdashboard/pending/${userId}`);
                 console.log("Fetched pending documents:", response.data);
                 setPendingDocuments(response.data);
             } catch (error) {

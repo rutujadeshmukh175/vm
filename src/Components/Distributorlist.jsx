@@ -10,7 +10,7 @@ const DistributorList = () => {
     const [updatedPassword, setUpdatedPassword] = useState(""); // State for password editing
     const navigate = useNavigate(); // For navigation
 
-    const apiUrl = "https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/users/distributors";
+    const apiUrl = "http://localhost:3000/users/distributors";
 
     useEffect(() => {
         fetchDistributors();
@@ -33,7 +33,7 @@ const DistributorList = () => {
     const handleUpdateDistributor = async (id) => {
         try {
             if (updatedPassword) {
-                await axios.patch(`https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/users/password/${id}`, { newPassword: updatedPassword });
+                await axios.patch(`http://localhost:3000/users/password/${id}`, { newPassword: updatedPassword });
             }
 
             setDistributors(
@@ -80,7 +80,7 @@ const DistributorList = () => {
             Swal.fire("Deleted!", "Distributor has been deleted.", "success");
 
             try {
-                await axios.delete(`https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/users/delete/${id}`);
+                await axios.delete(`http://localhost:3000/users/delete/${id}`);
                 setDistributors((prevDistributors) =>
                     prevDistributors.filter((distributor) => distributor.user_id !== id)
                 );
@@ -100,7 +100,7 @@ const DistributorList = () => {
                 )
             );
 
-            await axios.patch(`https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/users/status/${id}`, { status: newStatus });
+            await axios.patch(`http://localhost:3000/users/status/${id}`, { status: newStatus });
 
             Swal.fire("Updated!", `Status changed to ${newStatus}`, "success");
         } catch (error) {

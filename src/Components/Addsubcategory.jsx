@@ -11,7 +11,7 @@ const Subcategories = () => {
   const [updatedName, setUpdatedName] = useState("");
   const [isAdding, setIsAdding] = useState(false);
 
-  const API_BASE_URL = "https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com";
+  const API_BASE_URL = "http://localhost:3000";
 
   useEffect(() => {
     fetchSubcategories();

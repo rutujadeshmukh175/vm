@@ -15,7 +15,7 @@ const DocumentTable = () => {
 
   const fetchDocuments = async () => {
     try {
-      const response = await axios.get("https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/document-types");
+      const response = await axios.get("http://localhost:3000/document-types");
       setDocuments(response.data);
     } catch (error) {
       console.error("Error fetching documents:", error);
@@ -30,9 +30,9 @@ const DocumentTable = () => {
     e.preventDefault();
     try {
       if (editingDoc) {
-        await axios.put(`https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/document-types/${editingDoc.doc_type_id}`, formData);
+        await axios.put(`http://localhost:3000/document-types/${editingDoc.doc_type_id}`, formData);
       } else {
-        await axios.post("https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/document-types/", formData);
+        await axios.post("http://localhost:3000/document-types/", formData);
       }
       setIsModalOpen(false);
       fetchDocuments();
@@ -56,7 +56,7 @@ const DocumentTable = () => {
 
     if (confirmDelete.isConfirmed) {
       try {
-        await axios.delete(`https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/document-types/${id}`);
+        await axios.delete(`http://localhost:3000/document-types/${id}`);
         fetchDocuments();
         Swal.fire("Deleted!", "Document has been deleted.", "success");
       } catch (error) {

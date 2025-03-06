@@ -24,7 +24,7 @@ const RequiredDocuments = () => {
 
   const fetchDocuments = async () => {
     try {
-      const response = await axios.get("https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/required-documents");
+      const response = await axios.get("http://localhost:3000/required-documents");
       setDocuments(response.data);
     } catch (error) {
       console.error("Error fetching documents:", error);
@@ -33,7 +33,7 @@ const RequiredDocuments = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/categories");
+      const response = await axios.get("http://localhost:3000/categories");
       setCategories(response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -43,7 +43,7 @@ const RequiredDocuments = () => {
   const fetchSubcategories = async (categoryId) => {
     if (!categoryId) return;
     try {
-      const response = await axios.get(`https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/subcategories/category/${categoryId}`);
+      const response = await axios.get(`http://localhost:3000/subcategories/category/${categoryId}`);
       setSubcategories(response.data);
     } catch (error) {
       console.error("Error fetching subcategories:", error);
@@ -90,7 +90,7 @@ const RequiredDocuments = () => {
 
       // **Perform API call in the background**
       axios
-        .delete(`https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/required-documents/${id}`)
+        .delete(`http://localhost:3000/required-documents/${id}`)
         .then(() => {
           fetchDocuments(); // Refresh document list
         })
@@ -109,7 +109,7 @@ const RequiredDocuments = () => {
 
   const handleSave = async (id) => {
     try {
-      await axios.patch(`https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/required-documents/${id}`, {
+      await axios.patch(`http://localhost:3000/required-documents/${id}`, {
         document_names: editedName,
       });
       Swal.fire("Updated!", "Document name updated successfully", "success");
@@ -123,7 +123,7 @@ const RequiredDocuments = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/required-documents", formData);
+      await axios.post("http://localhost:3000/required-documents", formData);
       Swal.fire("Added!", "Document added successfully", "success");
       fetchDocuments();
       setModalOpen(false);

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaFileInvoice,FaDownload } from "react-icons/fa"; // Document icon
+import { FaFileInvoice, FaDownload } from "react-icons/fa"; // Document icon
 import jwtDecode from "jwt-decode"; // JWT decoder
 import Swal from "sweetalert2"; // Popup notifications
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
 const VerifyDocuments = () => {
   const [documents, setDocuments] = useState([]);
@@ -37,7 +37,7 @@ const VerifyDocuments = () => {
   const fetchDocuments = async (distributorId) => {
     try {
       const response = await axios.get(
-        `https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/documents/list/${distributorId}`
+        `http://localhost:3000/documents/list/${distributorId}`
       );
 
       const filteredDocuments = response.data.documents.filter(
@@ -54,7 +54,7 @@ const VerifyDocuments = () => {
   const fetchCertificates = async () => {
     try {
       console.log("Fetching certificates...");
-      const response = await axios.get("https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/certificates"); // Adjust URL if needed
+      const response = await axios.get("http://localhost:3000/certificates"); // Adjust URL if needed
       console.log("Certificates API Response:", response.data);
       setCertificates(response.data);
     } catch (error) {
@@ -74,15 +74,15 @@ const VerifyDocuments = () => {
       Swal.fire("Error", "Certificate not found.", "error");
       return;
     }
-  
+
     // Open the link first before fetching data (avoids popup blocker)
     const newTab = window.open("", "_blank");
-  
+
     try {
       console.log(`Fetching certificate for Certificate ID: ${certificate.certificate_id}`);
-      const response = await axios.get(`https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/certificates/${certificate.certificate_id}`);
+      const response = await axios.get(`http://localhost:3000/certificates/${certificate.certificate_id}`);
       console.log("View Certificate API Response:", response.data);
-  
+
       if (response.data && response.data.file_url) {
         newTab.location.href = response.data.file_url; // Set the URL in the new tab
       } else {
@@ -95,7 +95,7 @@ const VerifyDocuments = () => {
       Swal.fire("Error", "Failed to fetch certificate.", "error");
     }
   };
-  
+
   const handleViewInvoice = (documentId, categoryId, subcategoryId) => {
     navigate(`/Distributorinvoice/${documentId}`, { state: { categoryId, subcategoryId } });
   };
@@ -106,16 +106,16 @@ const VerifyDocuments = () => {
 
 
 
-  
+
   const handleDownloadCertificate = async (documentId, name) => {
     try {
       const response = await axios.get(
-        `https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/download-certificate/${documentId}`,
+        `http://localhost:3000/download-certificate/${documentId}`,
         {
           responseType: "blob", // Important to handle file downloads
         }
       );
-  
+
       // Create a downloadable link
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
@@ -168,30 +168,28 @@ const VerifyDocuments = () => {
               {documents.map((doc, index) => (
                 <tr
                   key={doc.document_id}
-                  className={`border border-gray-300 ${
-                    index % 2 === 0 ? "bg-[#fffaf4]" : "bg-white"
-                  }`}
+                  className={`border border-gray-300 ${index % 2 === 0 ? "bg-[#fffaf4]" : "bg-white"
+                    }`}
                 >
                   <td className="border p-3 text-center">{doc.application_id}</td>
                   <td className="border p-3 text-center">{doc.category_name}</td>
                   <td className="border p-3 text-center">{doc.subcategory_name}</td>
-  
+
                   <td className="border p-3 text-center">
                     <span
-                      className={`px-3 py-1 rounded-full text-white text-sm ${
-                        doc.status === "Processing"
-                          ? "bg-orange-500"
-                          : doc.status === "Rejected"
+                      className={`px-3 py-1 rounded-full text-white text-sm ${doc.status === "Processing"
+                        ? "bg-orange-500"
+                        : doc.status === "Rejected"
                           ? "bg-red-500"
                           : doc.status === "Uploaded"
-                          ? "bg-blue-500"
-                          : "bg-yellow-500"
-                      }`}
+                            ? "bg-blue-500"
+                            : "bg-yellow-500"
+                        }`}
                     >
                       {doc.status}
                     </span>
                   </td>
-  
+
                   <td className="border p-3 text-center">
                     <button
                       onClick={() => handleViewInvoice(doc.document_id)}
@@ -200,7 +198,7 @@ const VerifyDocuments = () => {
                       <FaFileInvoice className="mr-1" /> Action
                     </button>
                   </td>
-  
+
                   <td className="border p-3 text-center">
                     <button
                       onClick={() => handleView(doc.document_id)}
@@ -209,10 +207,10 @@ const VerifyDocuments = () => {
                       <FaFileInvoice className="mr-1" /> View
                     </button>
                   </td>
-  
+
                   <td className="border px-4 py-2 text-center">
                     {["Uploaded", "Completed"].includes(doc.status) &&
-                    getCertificateByDocumentId(doc.document_id) ? (
+                      getCertificateByDocumentId(doc.document_id) ? (
                       <button
                         onClick={() => handleViewCertificate(doc.document_id)}
                         className="bg-[#F58A3B] text-white px-3 py-1 rounded hover:bg-green-600 transition"
@@ -223,7 +221,7 @@ const VerifyDocuments = () => {
                       <span className="text-gray-500">No Certificate</span>
                     )}
                   </td>
-  
+
                   <td className="border p-3 text-center">
                     {getCertificateByDocumentId(doc.document_id) ? (
                       <button
@@ -244,6 +242,6 @@ const VerifyDocuments = () => {
       </div>
     </div>
   );
-}  
+}
 
 export default VerifyDocuments;

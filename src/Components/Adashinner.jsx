@@ -18,12 +18,12 @@ const Adashinner = () => {
   const [showPendingModal, setShowPendingModal] = useState(true); // State for showing the pending modal
   const navigate = useNavigate();
 
-  const API_BASE_URL = "https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/categories";
-  const SUBCATEGORIES_API_URL = "https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/subcategories";
-  const API_URL = "https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/statistics/cscounts";
+  const API_BASE_URL = "http://localhost:3000/categories";
+  const SUBCATEGORIES_API_URL = "http://localhost:3000/subcategories";
+  const API_URL = "http://localhost:3000/statistics/cscounts";
 
   useEffect(() => {
-    fetch("https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/statistics/counts")
+    fetch("http://localhost:3000/statistics/counts")
       .then((res) => res.json())
       .then((result) => setData(result))
       .catch((err) => console.error("Error fetching data:", err));

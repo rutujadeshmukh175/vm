@@ -10,7 +10,7 @@ const RecentApplications = () => {
     useEffect(() => {
         const fetchApplications = async () => {
             try {
-                const response = await fetch('https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/documents/recent');
+                const response = await fetch('http://localhost:3000/documents/recent');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }

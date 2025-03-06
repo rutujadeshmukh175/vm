@@ -48,7 +48,7 @@ const InvoicePage = () => {
 
   useEffect(() => {
     axios
-      .get("https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/users/distributors")
+      .get("http://localhost:3000/users/distributors")
       .then((response) => setDistributors(response.data))
       .catch((error) => console.error("Error fetching distributors:", error));
   }, []);
@@ -73,7 +73,7 @@ const InvoicePage = () => {
     }
 
     try {
-      await axios.put(`https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/documents/update-status/${documentId}`, {
+      await axios.put(`http://localhost:3000/documents/update-status/${documentId}`, {
         status: newStatus,
         rejectionReason: newStatus === "Rejected" ? rejectionReason : undefined,
       });
@@ -96,7 +96,7 @@ const InvoicePage = () => {
   // Add this function inside your InvoicePage component
   const handleDownloadAllDocuments = async () => {
     try {
-      const response = await axios.get(`https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/download/${documentId}`, {
+      const response = await axios.get(`http://localhost:3000/download/${documentId}`, {
         responseType: 'blob', // Handle binary data
       });
 
@@ -143,7 +143,7 @@ const InvoicePage = () => {
   const handleAssignDistributor = async (distributorId) => {
     if (!distributorId) return;
     try {
-      await axios.put(`https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/documents/assign-distributor/${documentId}`, {
+      await axios.put(`http://localhost:3000/documents/assign-distributor/${documentId}`, {
         distributor_id: distributorId,
       });
       setDocumentData((prev) => ({ ...prev, distributor_id: distributorId }));
@@ -177,7 +177,7 @@ const InvoicePage = () => {
 
   const fetchDocumentData = useCallback(async () => {
     try {
-      const response = await axios.get(`https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/singledocument/documentby/${documentId}`);
+      const response = await axios.get(`http://localhost:3000/singledocument/documentby/${documentId}`);
       const data = response.data.document;
       setDocumentData(data);
 
@@ -185,7 +185,7 @@ const InvoicePage = () => {
       const subcategory = stateSubcategoryId || data.subcategory_id;
 
       if (category && subcategory) {
-        const fieldNamesResponse = await axios.get(`https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/field-names/${category}/${subcategory}`);
+        const fieldNamesResponse = await axios.get(`http://localhost:3000/field-names/${category}/${subcategory}`);
         setDocumentNames(fieldNamesResponse.data);
       }
     } catch (error) {

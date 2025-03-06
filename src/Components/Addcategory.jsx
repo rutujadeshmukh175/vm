@@ -10,7 +10,7 @@ const AddCategory = () => {
   const [editingId, setEditingId] = useState(null);
   const [updatedName, setUpdatedName] = useState("");
 
-  const apiUrl = "https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/categories";
+  const apiUrl = "http://localhost:3000/categories";
 
   useEffect(() => {
     fetchCategories();

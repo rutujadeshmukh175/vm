@@ -35,7 +35,7 @@ const ErrorRequests = () => {
     try {
       console.log(`Fetching error requests for distributor ID: ${distributorId}`);
       const response = await axios.get(
-        `https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/request-errors/distributor/${distributorId}`
+        `http://localhost:3000/request-errors/distributor/${distributorId}`
       );
       console.log("Error Requests API Response:", response.data);
 
@@ -54,7 +54,7 @@ const ErrorRequests = () => {
   const fetchCertificates = async () => {
     try {
       console.log("Fetching certificates...");
-      const response = await axios.get("https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/certificates");
+      const response = await axios.get("http://localhost:3000/certificates");
       console.log("Certificates API Response:", response.data);
       setCertificates(response.data);
     } catch (error) {
@@ -80,7 +80,7 @@ const ErrorRequests = () => {
     }
     try {
       console.log(`Fetching certificate for Certificate ID: ${certificateId}`);
-      const response = await axios.get(`https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/certificates/${certificateId}`);
+      const response = await axios.get(`http://localhost:3000/certificates/${certificateId}`);
       console.log("View Certificate API Response:", response.data);
 
       if (response.data && response.data.file_url) {
@@ -108,7 +108,7 @@ const ErrorRequests = () => {
   const handleDownloadCertificate = async (documentId, requestName) => {
     try {
       const response = await axios.get(
-        `https://vm.q1prh3wrjc0aw.ap-south-1.cs.amazonlightsail.com/download-certificate/${documentId}`,
+        `http://localhost:3000/download-certificate/${documentId}`,
         {
           responseType: "blob", // Important to handle file downloads
         }
@@ -201,14 +201,14 @@ const ErrorRequests = () => {
                     <td className="border px-4 py-2 text-center">
                       <span
                         className={`px-3 py-1 rounded-full text-white text-sm flex items-center justify-center gap-1 ${request.request_status === "Completed"
-                            ? "bg-yellow-500"
-                            : request.request_status === "Approved"
-                              ? "bg-green-500"
-                              : request.request_status === "Distributor Rejected"
-                                ? "bg-red-500"
-                                : request.request_status === "Uploaded"
-                                  ? "bg-purple-500"
-                                  : "bg-gray-500"
+                          ? "bg-yellow-500"
+                          : request.request_status === "Approved"
+                            ? "bg-green-500"
+                            : request.request_status === "Distributor Rejected"
+                              ? "bg-red-500"
+                              : request.request_status === "Uploaded"
+                                ? "bg-purple-500"
+                                : "bg-gray-500"
                           }`}
                       >
                         ⬤ {request.request_status}
