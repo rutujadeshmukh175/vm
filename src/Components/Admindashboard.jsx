@@ -48,10 +48,10 @@ const Sidebar = ({ onNavigate }) => {
               { icon: <FaFileAlt />, label: "Required Documents", path: "/requireddocuments" }, // Document Icon
               // { icon: <FaFileUpload />, label: "Add Services", path: "/documenttable" }, // Upload File Icon
               { icon: <FaShapes />, label: "Field Names", path: "/Addfieldname" }, // Shapes Icon (for fields)
-              { icon: <FaExchangeAlt />, label: "Transaction", path: "/transactions" }, // Exchange Icon
+              // { icon: <FaExchangeAlt />, label: "Transaction", path: "/transactions" }, // Exchange Icon
               { icon: <FaCheckCircle />, label: "Verify Documents", path: "/Verifydocuments" }, // Check Circle (Verification)
               { icon: <FaCheckCircle />, label: "Verify Documents History", path: "/Verifydocumentshistory" },
-              { icon: <FaCheckCircle />, label: " Assigned Distributor List", path: "/AssignedDistributorsList" },
+              { icon: <FaCheckCircle />, label: " Assigned Distributor List", path: "/Assigndistributorlist" },
               { icon: <FaCheckCircle />, label: "   Feedback List", path: "/FeedbackList" },
 
 
@@ -60,8 +60,8 @@ const Sidebar = ({ onNavigate }) => {
               <li
                 key={index}
                 className={`flex items-center p-2 rounded-lg cursor-pointer transition duration-300 ease-in-out mb-2 shadow-md ${activePath === item.path
-                    ? "bg-white text-black border-l-4 border-blue-600"
-                    : "bg-gray-600 hover:bg-gray-400"
+                  ? "bg-white text-black border-l-4 border-blue-600"
+                  : "bg-gray-600 hover:bg-gray-400"
                   }`}
                 onClick={() => handleNavigation(item.path)}
               >

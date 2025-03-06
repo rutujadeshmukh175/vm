@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaRegFileAlt, FaDownload, FaFileInvoice, FaCheck, FaTimes } from "react-icons/fa";
+import { FaRegFileAlt, FaDownload, FaFileInvoice, FaCheck } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const AssignedDistributorsList = () => {
@@ -10,37 +10,31 @@ const AssignedDistributorsList = () => {
     const [statusFilter, setStatusFilter] = useState("");
     const [documents, setDocuments] = useState([]);
     const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true); // Add loading state
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Fetch assigned documents from the new API
+        // Fetch assigned documents
         axios
             .get("http://localhost:3000/documents/assigned-list")
             .then((response) => {
+                console.log("API Response:", response.data); // Log the full response
                 const sortedDocuments = response.data.documents.sort(
                     (a, b) => new Date(b.uploaded_at) - new Date(a.uploaded_at)
                 );
                 setDocuments(sortedDocuments);
+                setLoading(false); // Set loading to false after data is fetched
             })
-            .catch((error) => console.error("Error fetching assigned documents:", error));
+            .catch((error) => {
+                console.error("Error fetching assigned documents:", error);
+                alert("Error fetching documents!");
+                setLoading(false); // Set loading to false even if there's an error
+            });
 
-        // Fetch distributors
-        axios
-            .get("http://localhost:3000/users/distributors")
-            .then((response) => setDistributors(response.data))
-            .catch((error) => console.error("Error fetching distributors:", error));
-
-        // Fetch certificates
-        axios
-            .get("http://localhost:3000/certificates")
-            .then((response) => setCertificates(response.data))
-            .catch((error) => console.error("Error fetching certificates:", error));
-
-        // Fetch users
-        axios
-            .get("http://localhost:3000/users/register")
-            .then((response) => setUsers(response.data))
-            .catch((error) => console.error("Error fetching users:", error));
+        // Fetch other data (distributors, certificates, users)
+        axios.get("http://localhost:3000/users/distributors").then((response) => setDistributors(response.data));
+        axios.get("http://localhost:3000/certificates").then((response) => setCertificates(response.data));
+        axios.get("http://localhost:3000/users/register").then((response) => setUsers(response.data));
     }, []);
 
     const handleStatusFilterChange = (e) => {
@@ -51,7 +45,6 @@ const AssignedDistributorsList = () => {
         setSearchQuery(e.target.value);
     };
 
-    // Update document status
     const handleUpdateStatus = async (documentId, newStatus) => {
         try {
             await axios.put(`http://localhost:3000/documents/update-status/${documentId}`, {
@@ -68,6 +61,7 @@ const AssignedDistributorsList = () => {
         }
     };
 
+    // Debug: Log filtered documents
     const filteredDocuments = documents
         .filter((doc) => doc.status === "Completed" || doc.status === "Rejected") // Only Rejected or Completed
         .filter((doc) =>
@@ -89,13 +83,15 @@ const AssignedDistributorsList = () => {
             );
         });
 
+    console.log("Filtered Documents:", filteredDocuments); // Debug: Log filtered documents
+
     const getDistributorName = (distributorId) => {
         const distributor = users.find((user) => Number(user.user_id) === Number(distributorId));
         return distributor ? distributor.name : "";
     };
 
-    const handleViewInvoice = (documentId, categoryId, subcategoryId) => {
-        navigate(`/Invoice/${documentId}`, { state: { categoryId, subcategoryId } });
+    const handleViewInvoice = (documentId) => {
+        navigate(`/Invoice/${documentId}`);
     };
 
     const handleView = (documentId, categoryId, subcategoryId) => {
@@ -131,15 +127,14 @@ const AssignedDistributorsList = () => {
             const response = await axios.get(
                 `http://localhost:3000/download-certificate/${documentId}`,
                 {
-                    responseType: "blob", // Important to handle file downloads
+                    responseType: "blob",
                 }
             );
 
-            // Create a downloadable link
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement("a");
             link.href = url;
-            link.setAttribute("download", `${name}.zip`); // Set ZIP file name based on user name
+            link.setAttribute("download", `${name}.zip`);
             document.body.appendChild(link);
             link.click();
             link.parentNode.removeChild(link);
@@ -149,12 +144,15 @@ const AssignedDistributorsList = () => {
         }
     };
 
+    if (loading) {
+        return <div>Loading...</div>; // Show loading message
+    }
+
     return (
-        <div className="ml-[295px] flex flex-col items-center min-h-screen p-10 bg-gray-100  max-h-[1000px]">
+        <div className="ml-[295px] flex flex-col items-center min-h-screen p-10 bg-gray-100 max-h-[1000px]">
             <div className="w-full p-6 bg-white rounded-lg shadow-lg">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-xl font-bold text-gray-800">Verify Documents</h2>
-
                     <div className="flex items-center space-x-4">
                         <div>
                             <label htmlFor="statusFilter" className="mr-2">Filter by Status:</label>
@@ -170,7 +168,6 @@ const AssignedDistributorsList = () => {
                                 <option value="Completed">Completed</option>
                             </select>
                         </div>
-
                         <input
                             type="text"
                             placeholder="Search documents..."
@@ -194,7 +191,6 @@ const AssignedDistributorsList = () => {
                                 <th className="border p-2 font-bold">Assign Distributor</th>
                                 <th className="border p-2 font-bold">Verification</th>
                                 <th className="border p-2 font-bold">Completed</th>
-
                                 <th className="border p-2 font-bold">Action</th>
                                 <th className="border p-2 font-bold">View</th>
                                 <th className="border p-2 font-bold">Certificate</th>
@@ -214,7 +210,6 @@ const AssignedDistributorsList = () => {
                                     <td className="border p-2">{doc.name}</td>
                                     <td className="border p-2 break-words">{doc.email}</td>
                                     <td className="border p-2">{getDistributorName(doc.distributor_id)}</td>
-
                                     <td className="border p-2">
                                         <span
                                             className={`px-3 py-1 rounded-full text-white text-sm ${doc.status === "Approved"
@@ -227,7 +222,6 @@ const AssignedDistributorsList = () => {
                                             {doc.status}
                                         </span>
                                     </td>
-
                                     <td className="border p-2">
                                         <button
                                             onClick={() => handleUpdateStatus(doc.document_id, "Completed")}
@@ -236,10 +230,6 @@ const AssignedDistributorsList = () => {
                                             <FaCheck className="text-white" />
                                         </button>
                                     </td>
-
-
-
-
                                     <td className="border p-2 text-center">
                                         <button
                                             onClick={() => handleViewInvoice(doc.document_id)}
@@ -248,19 +238,16 @@ const AssignedDistributorsList = () => {
                                             <FaFileInvoice className="mr-1" /> Action
                                         </button>
                                     </td>
-
                                     <td className="border p-2 text-center">
                                         <button onClick={() => handleView(doc.document_id, doc.category_id, doc.subcategory_id)} className="bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-600 transition">
                                             <FaRegFileAlt className="mr-1" /> View
                                         </button>
                                     </td>
-
                                     <td className="border p-2 text-center">
                                         <button onClick={() => handleViewCertificate(doc.document_id)} className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition">
                                             <FaCheck className="mr-1" /> Certificate
                                         </button>
                                     </td>
-
                                     <td className="border p-2 text-center">
                                         <button onClick={() => handleDownloadCertificate(doc.document_id, doc.name)} className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">
                                             <FaDownload className="mr-1" /> Download
